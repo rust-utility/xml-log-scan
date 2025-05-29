@@ -49,7 +49,7 @@ $ xml-log-scan --help
 
 Sample log:
 
-```
+```bash
 {{ read_to_str "fixtures/example.log" }}
 ```
 

@@ -56,7 +56,7 @@ Options:
 
 Sample log:
 
-```
+```bash
 123414214231234 <hello>
   <world/>
 </hello>
