@@ -1,0 +1,23 @@
+[package]
+name = "xml-log-scan"
+version = "0.1.0"
+authors = ["Alexander Korolev <alexander.korolev.germany@gmail.com>"]
+edition = "2024"
+categories = ["development-tools::debugging", "command-line-utilities"]
+description = """
+xml-log-scan description.
+"""
+homepage = "https://github.com/kilork/xml-log-scan"
+keywords = ["XML", "XPath", "XPath3", "DOM", "SAX"]
+license = "Unlicense OR MIT"
+repository = "https://github.com/kilork/xml-log-scan"
+rust-version = "1.87"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "~4.5", features = ["derive", "env"] }
+quick-xml = "~0.37.5"
+# sxd-document = "0.3.2"
+# sxd-xpath = "0.4.2"
+amxml = "0.5.3"
