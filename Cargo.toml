@@ -17,3 +17,4 @@ rust-version = "1.87"
 clap = { version = "~4.5", features = ["derive", "env"] }
 quick-xml = "~0.37.5"
 amxml = "0.5.3"
+regex = "1"

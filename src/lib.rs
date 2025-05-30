@@ -14,17 +14,39 @@
 use std::io::{BufRead, Cursor, Read};
 
 use quick_xml::{Reader, Writer, events::Event};
+use regex::bytes::Regex;
 
 /// Filter and print XMLs.
 pub fn filter_xmls(mut input: impl BufRead, xpath: Option<&str>) {
+    let log_entry_date_regex =
+        Regex::new(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}").expect("valid regex");
+    let log_entry_non_ws_regex = Regex::new(r"^\S").expect("valid regex");
+
     let mut buffer = [0u8; 1024];
+
+    let mut first_entry = Vec::new();
+
     while let Ok(count) = input.read(&mut buffer) {
         if count == 0 {
             break;
         }
+        first_entry.extend_from_slice(&buffer[..count]);
+        if first_entry.len() > 19 {
+            break;
+        }
+    }
 
-        let mut head = &buffer[..count];
+    let log_entry_regex = if log_entry_date_regex.is_match(&first_entry) {
+        Some(Regex::new(r"\n\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}").expect("valid regex"))
+    } else if log_entry_non_ws_regex.is_match(&first_entry) {
+        Some(Regex::new(r"\n\S").expect("valid regex"))
+    } else {
+        None
+    };
 
+    let mut head = first_entry.as_slice();
+
+    loop {
         while let Some(pos) = head.iter().position(|&n| n == b'<') {
             head = &head[pos..];
 
@@ -60,6 +82,13 @@ pub fn filter_xmls(mut input: impl BufRead, xpath: Option<&str>) {
                                 }
                                 depth -= 1;
                             }
+                            Ok(Event::Text(e)) => {
+                                if let Some(log_entry_regex) = log_entry_regex.as_ref() {
+                                    if log_entry_regex.is_match(&e) {
+                                        break Err(());
+                                    }
+                                }
+                            }
                             Ok(Event::Eof) | Err(_) => break Err(()),
                             _ => (),
                         }
@@ -81,8 +110,9 @@ pub fn filter_xmls(mut input: impl BufRead, xpath: Option<&str>) {
                     let doc = new_document(&xml).expect("well formed XML");
                     let root = doc.root_element();
                     let result = root.eval_xpath(xpath).expect("XPath expression");
-                    if result.len() > 0 {
-                        println!("{}", result.to_string());
+
+                    for item in (0..result.len()).filter_map(|i| result.get_item(i).as_nodeptr()) {
+                        println!("{}", item.to_string());
                     }
                 } else {
                     println!("{xml}");
@@ -98,6 +128,15 @@ pub fn filter_xmls(mut input: impl BufRead, xpath: Option<&str>) {
             } else {
                 break;
             }
+        }
+
+        if let Ok(count) = input.read(&mut buffer) {
+            if count == 0 {
+                break;
+            }
+            head = &buffer[..count];
+        } else {
+            break;
         }
     }
 }
