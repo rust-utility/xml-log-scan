@@ -3,7 +3,7 @@
 set -e
 
 cargo set-version --bump patch
-VERSION=`cargo pkgid | cut -d "@" -f2`
+VERSION=`cargo pkgid | cut -d "#" -f2`
 cargo update
 cargo build
 
