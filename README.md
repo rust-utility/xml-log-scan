@@ -6,10 +6,10 @@ Dual-licensed under `MIT` or the [UNLICENSE](http://unlicense.org/).
 
 ## Features
 
-- Parses and analyzes log files containing XMLs
+- Extracts XMLs from log files or standard input
 - Outputs results in a structured and human-readable format
+- Supports [XPath 3.1](https://www.w3.org/TR/xpath-31/) transformation
 - Can handle large log files efficiently
-- Maybe used to pipe output of other command
 
 ## Support:
 
@@ -92,10 +92,14 @@ $ cat fixtures/example.log | xml-log-scan
 
 ```
 
-### Apply XPath to found XMLs
+### Apply XPath to XMLs found
 
 ```bash
 $ xml-log-scan --input fixtures/example.log --xpath //world
-<world>
+<world/>
 
 ```
+
+## References
+
+- [XPath 3.1](https://www.w3.org/TR/xpath-31/)

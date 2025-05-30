@@ -5,12 +5,12 @@ authors = ["Alexander Korolev <alexander.korolev.germany@gmail.com>"]
 edition = "2024"
 categories = ["development-tools::debugging", "command-line-utilities"]
 description = """
-Parses and analyzes log files containing XMLs.
+Extracts XMLs from log files or standard input. Supports XPath 3.1 evaluation against XMLs found.
 """
-homepage = "https://github.com/kilork/xml-log-scan"
+homepage = "https://github.com/rust-utility/xml-log-scan"
 keywords = ["XML", "XPath", "XPath3", "DOM", "SAX"]
 license = "Unlicense OR MIT"
-repository = "https://github.com/kilork/xml-log-scan"
+repository = "https://github.com/rust-utility/xml-log-scan"
 rust-version = "1.87"
 
 [dependencies]
