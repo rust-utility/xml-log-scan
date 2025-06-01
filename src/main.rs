@@ -8,6 +8,15 @@ struct Cli {
     /// XPath transformation to apply to XML readed.
     #[arg(long, short, env)]
     xpath: Option<String>,
+    /// File with XPath transformation to apply to XML readed.
+    #[arg(long, env, conflicts_with = "xpath")]
+    xpath_file: Option<String>,
+    /// Regular expression to identify log entry start, should start with \n.
+    #[arg(long, short, env)]
+    regex: Option<String>,
+    /// File with regular expression to identify log entry start, should start with \n.
+    #[arg(long, env, conflicts_with = "regex")]
+    regex_file: Option<String>,
     /// File input.
     #[arg(long, short)]
     input: Option<PathBuf>,
