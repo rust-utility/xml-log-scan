@@ -32,8 +32,14 @@ pub fn filter_xmls(input: impl BufRead, xpath: Option<&str>) {
                 let result = root.eval_xpath(xpath).expect("XPath expression");
 
                 (0..result.len())
-                    .filter_map(|i| result.get_item(i).as_nodeptr())
-                    .map(|item| item.to_string())
+                    .map(|i| result.get_item(i))
+                    .map(|item| {
+                        if let Some(node) = item.as_nodeptr() {
+                            node.to_string()
+                        } else {
+                            item.to_string()
+                        }
+                    })
                     .collect::<Vec<_>>()
                     .join("\n")
             })
